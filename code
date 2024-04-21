@@ -4,17 +4,13 @@
 #include<cstdlib>
 using namespace std;
 
-
 const int width=30;
 const int height=30;
 bool g_o;                                                   //bool game over
 enum button{STOP=0,LEFT,RIGHT,UP,DOWN};
 button b;
 int sx,sy,tx[900],ty[900],numt,ax,ay,sc;                    //sx:snake y,sy:snake y,ay:apple y ,sc:score , numt =tail count,tx and ty are array of tail x and y coordinates 
-class Sgame{                                                //class of snake game
-
-                                                            //to keep the setup of the game private and giving user the access to only play the game and not access and disturb the flow and working of the game--abstraction
-
+class screen{
     void print(){                                           // function that prints the game setup
         system("CLS");                                      //to not print game step by step one after other sleep but to clear and then print again
         for(int i=0;i<width+1;i++){
@@ -51,89 +47,112 @@ class Sgame{                                                //class of snake gam
         }
         cout<<endl<<"Score :"<<sc;
     }
-    void play(){        //setting up commands
-        if(_kbhit()){                                   
-            switch(_getch()){
-                case 'w':
-                    b=UP;
-                    break;
-                case 's':
-                    b=DOWN;
-                    break;
-                case 'a':
-                    b=LEFT;
-                    break;
-                case 'd':
-                    b=RIGHT;
-                    break;
-                case 'm':
-                    g_o=true;
-                    break;
-                default:
-                    break;
-            }
-        }
+public:
+    screen(){
+        print();
     }
-    void conditions(){
-        int tempx=tx[0],tempy=ty[0],ttempx,ttempy;
-        tx[0]=sx;                       // condition for tail to follow the head
-        ty[0]=sy;
-        for(int i=1;i<numt;i++){
-            ttempx=tx[i];
-            ttempy=ty[i];
-            tx[i]=tempx;                    //to make it follow the previous
-            ty[i]=tempy;
-            tempx=ttempx;                   //updation for next iteration of the for loop
-            tempy=ttempy;
-        }
-        switch(b){
-            case UP:
-                sy--;
+};
+class input{
+void play(){        //setting up commands
+    if(_kbhit()){                                   
+        switch(_getch()){
+            case 'w':
+                b=UP;
                 break;
-            case DOWN:
-                sy++;
+            case 's':
+                b=DOWN;
                 break;
-            case RIGHT:
-                sx++;
+            case 'a':
+                b=LEFT;
                 break;
-            case LEFT:
-                sx--;
+            case 'd':
+                b=RIGHT;
+                break;
+            case 'm':
+                g_o=true;
                 break;
             default:
                 break;
         }
-        if(sx<0 || sx>=width || sy<0 || sy>=height ){
-            g_o=true;
-        }
-        if(sx==ax && sy==ay){
-            sc++;
-            numt++;
-            ax = rand() % width;
-            ay = rand() % height;
-        }
-        for(int i=0;i<numt;i++){
-            if(sx==tx[i] && sy==ty[i]){             // snakes mouth on its own tail
-                g_o=true;
-            }
-        }
     }
+}
 public:
-    Sgame(){
-        b=STOP;                                              //snake has to be not moving initially
-        sx=width-4,sy=height-4;                                          // initialising snakes position
-        ax = rand () % width;                                   // we want the apple-x to be in random position and to be inside the boundary
-        ay= rand () % height;                                  // we want the apple-y to be in random position and to be inside the boundary
-        sc=0,numt=0;                                               //initialise score to 0
-        g_o=false;                                           //game has just started 😎😎
-        while(!g_o){                                        // until u fulfill the conditions to lose
-            print();
-            play();
-            conditions();
-            Sleep(200);                             //to slow down the flickering
-        }
+    input(){
+        play();
     }
 };
+class rules{
+void conditions(){
+    int tempx=tx[0],tempy=ty[0],ttempx,ttempy;
+    tx[0]=sx;                       // condition for tail to follow the head
+    ty[0]=sy;
+    for(int i=1;i<numt;i++){
+        ttempx=tx[i];
+        ttempy=ty[i];
+        tx[i]=tempx;                    //to make it follow the previous
+        ty[i]=tempy;
+        tempx=ttempx;                   //updation for next iteration of the for loop
+        tempy=ttempy;
+    }
+    switch(b){
+        case UP:                        // what does the button b does 
+            sy--;
+            break;
+        case DOWN:
+            sy++;
+            break;
+        case RIGHT:
+            sx++;
+            break;
+        case LEFT:
+            sx--;
+            break;
+        default:
+            break;
+    }
+    if(sx<0 || sx>=width || sy<0 || sy>=height ){  // snake gets out of the boundary
+        g_o=true;
+    }
+    if(sx==ax && sy==ay){  // snake eats the apple 
+        sc++;
+        numt++;
+        ax = rand() % width;
+        ay = rand() % height;
+    }
+    for(int i=0;i<numt;i++){
+        if(sx==tx[i] && sy==ty[i]){             // snakes mouth on its own tail
+            g_o=true;
+        }
+    }
+}
+public:
+    rules(){
+        conditions();
+    }
+};
+class Sgame:private screen,private input,private rules{                                                //class of snake game inheriting all the components so that user has access only to start the game no access to the working of the code
+void start(){
+        b=STOP;                                              //snake has to be not moving initially
+        sx=width-4,sy=height-4;                              // initialising snakes position
+        ax = rand () % width;                                // we want the apple-x to be in random position and to be inside the boundary
+        ay= rand () % height;                                // we want the apple-y to be in random position and to be inside the boundary
+        sc=0,numt=0;                                         //initialise score to 0
+        g_o=false;                                           //game has just started 😎😎
+        while(!g_o){                                         // until u fulfill the conditions to lose
+            screen();
+            input();
+            rules();
+            Sleep(50);                             //to slow down the flickering
+        }
+}
+public:
+    Sgame(){}
+    inline friend void getsetgo();
+};
+void getsetgo(){
+    Sgame a;
+    a.start();
+}
 int main(){
-    Sgame Chinmay;
-    return 0;
+    getsetgo();
 }
