@@ -1,6 +1,13 @@
+in CPP
 //TRY TO PLAY ONCE .YOU WILL LOVE IT.
-//there are 2 modes --easy and hard that u can access by getsetgo1 for easy and getsetgo2 for hard
+//first i planned there to be 2 modes --easy and hard that u can access by easy() for easy and hard() for hard
 //in easy the apple is away from the boundary and snake moves slow while in hard mode the snake moves fast and the appple gets close to the boundary
+//'''BUT''' i made so that a person can train slowly to be a champion using these two modes with slight changes
+// by controlling the snake speed or it is basically the refresh rate
+// there are 2 modes to control to how far the apple will stay away from the boundary while u can control the snake speed in both the levels with some boundary conditions
+// in easy mode the snake speed or the refresh rate can be from 5-fps(sleep-200) to 20-fps(sleep-50)
+// in hard mode the snake speed or the refresh rate can be from 10-fps(sleep-100) to 200-fps(sleep-5)
+// if the user sets speed out of the boundary conditions for then in both the cases the lower speed will be set
 // i tried to make it hell lot of coloured but it got very slow so i made it only a bit coloured
 
 
@@ -13,12 +20,12 @@
 #include<cstdlib>
 using namespace std;
 int key=0;                                                 // to decide the level of the game
-const int width=30;
+const int width=40;
 const int height=20;
 bool g_o;                                                  //bool game over
 enum button{STOP=0,LEFT,RIGHT,UP,DOWN};
 button b;
-int sx,sy,tx[600],ty[600],numt,ax,ay,sc;                    //sx:snake y,sy:snake y,ay:apple y ,sc:score , numt =tail count,tx and ty are array of tail x and y coordinates 
+int sx,sy,tx[800],ty[800],numt,ax,ay,sc;                    //sx:snake y,sy:snake y,ay:apple y ,sc:score , numt =tail count,tx and ty are array of tail x and y coordinates 
 class screen{
     void print(){                                           // function that prints the game setup
         system("CLS");                                      //to not print game step by step one after other sleep but to clear and then print again
@@ -153,17 +160,17 @@ void conditions(){
             ax = rand () % width;                                // we want the apple-x to be in random position and to be inside the boundary
             if(ax<4 || ax>(height -4)){
                 if(ax<4){
-                    ax+=4;
+                    ax+=6;
                 }else{
-                    ax-=4;
+                    ax-=6;
                 }
             }
             ay= rand () % height;                                // we want the apple-y to be in random position and to be inside the boundary
             if(ay<4 || ay>(height -4)){
                 if(ay<4){
-                    ay+=4;
+                    ay+=6;
                 }else{
-                    ay-=4;
+                    ay-=6;
                 }
             }
         }
@@ -181,24 +188,24 @@ public:
     }
 };
 class Sgame:private screen,private input,private rules{                                                //class of snake game inheriting all the components so that user has access only to start the game no access to the working of the code
-void starteasy(){
+void starteasy(int a1){
         key=1;                                                // to make game easy for noobs
         b=STOP;                                              //snake has to be not moving initially
         sx=width-4,sy=height-4;                              // initialising snakes position
         ax = rand () % width;                                // we want the apple-x to be in random position and to be inside the boundary
         if(ax<4 || ax>(height -4)){
             if(ax<4){
-                ax+=4;
+                ax+=6;
             }else{
-                ax-=4;
+                ax-=6;
             }
         }
         ay= rand () % height;                                // we want the apple-y to be in random position and to be inside the boundary
         if(ay<4 || ay>(height -4)){
             if(ay<4){
-                ay+=4;
+                ay+=6;
             }else{
-                ay-=4;
+                ay-=6;
             }
         }
         sc=0,numt=0;                                         //initialise score to 0
@@ -207,10 +214,15 @@ void starteasy(){
             screen();
             input();
             rules();
-            Sleep(50);                                        //to slow down the flickering
+            if(a1<50 || a1>200){                                  //to control refresh rate or speed of snake
+                Sleep(200);
+            }else{
+                Sleep(a1);
+            }
+                                                    
         }
 }
-void starthard(){  
+void starthard(int a1){  
         b=STOP;                                              //snake has to be not moving initially
         sx=width-4,sy=height-4;                              // initialising snakes position
         ax = rand () % width;                                // we want the apple-x to be in random position and to be inside the boundary
@@ -221,24 +233,28 @@ void starthard(){
             screen();
             input();
             rules();
-            Sleep(20);                                        //to slow down the flickering
+            if(a1>100 || a1<5){                              //to control refresh rate or speed of snake
+                Sleep(100);
+            }else{
+                Sleep(a1);
+            }                          
         }
 }
 public:
     Sgame(){}
-    inline friend void getsetgo1();
-    inline friend void getsetgo2();
+    inline friend void easy(int a);
+    inline friend void hard(int a);
 };
-void getsetgo1(){
+void easy(int a1){
     Sgame a;
-    a.starteasy();
+    a.starteasy(a1);
 }
-void getsetgo2(){
+void hard(int a1){
     Sgame a;
-    a.starthard();
+    a.starthard(a1);
 }
 int main(){
-    getsetgo1();// if u want to play easy mode
-    //getsetgo2();   -- if u want to play hard mode
+    // easy(10);// if u want to play easy mode
+    hard(5);   //-- if u want to play hard mode
 }
 
