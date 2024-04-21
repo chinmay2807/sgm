@@ -1,160 +1,139 @@
-
-#include <iostream>
-#include <cstdlib>
-#include <conio.h>
-#include <windows.h>
+#include<conio.h>
+#include<windows.h>
 #include<bits/stdc++.h>
+#include<cstdlib>
 using namespace std;
 
-const int width = 30;
-const int height = 30;
-enum Button { STOP = 0, LEFT, RIGHT, UP, DOWN };
-Button b;
-int sx, sy, tx[ 900], ty[900],numt, ax, ay, sc;     //sx:snake y,sy:snake y,ay:apple y ,sc:score , numt =tail count,tx and ty are array of tail x and y coordinates 
-bool g_o;   //bool game over
 
-class Sgame {       //class of snake game
-private:        //to keep the setup of the game private and giving user the access to only play the game and not access and disturb the flow and working of the game--abstraction
+const int width=30;
+const int height=30;
+bool g_o;                                                   //bool game over
+enum button{STOP=0,LEFT,RIGHT,UP,DOWN};
+button b;
+int sx,sy,tx[900],ty[900],numt,ax,ay,sc;                    //sx:snake y,sy:snake y,ay:apple y ,sc:score , numt =tail count,tx and ty are array of tail x and y coordinates 
+class Sgame{                                                //class of snake game
 
-    void Print() {      // function that prints the game setup
-        system("cls");      //to not print game step by step one after other sleep but to clear and then print again
-        for (int i = 0; i < width + 2; i++){
+                                                            //to keep the setup of the game private and giving user the access to only play the game and not access and disturb the flow and working of the game--abstraction
 
-            cout << "?";        // '?' tells the boundary
+    void print(){                                           // function that prints the game setup
+        system("CLS");                                      //to not print game step by step one after other sleep but to clear and then print again
+        for(int i=0;i<width+1;i++){
+            cout<<"?";                                      // '?' tells the boundary
         }
-        cout << endl;
-
-        for (int i = 0; i < height; i++) {      
-            for (int j = 0; j < width; j++) {
-                if (j == 0){
-
-                    cout << "?";
-                }
-                if (i == sy && j == sx){
-
-                    cout << "S";
-                }
-                else if (i == ay && j == ax){
-
-                    cout << "A";
-                }
-                else {
-                    bool p = false;
-                    for (int k = 0; k < numt; k++) {
-                        if (tx[k] == j && ty[k] == i) {
-                            cout << "T";
+        cout<<endl;
+        for(int i=0;i<height;i++){
+            for(int j=0;j<width;j++){
+                if(j==0){
+                    cout<<"?";
+                }else if(i==sy && j==sx){
+                    cout<<"S";
+                }else if(i==ay && j==ax){
+                    cout<<"A";
+                }else{
+                    bool p =false;
+                    for (int n=0;n<numt;n++){
+                        if(j==tx[n] && i==ty[n]){
+                            cout<<"T";
                             p = true;
                         }
-                    }
-                    if (!p){
-
-                        cout << " ";
+                    }if(!p){
+                    cout<<" ";
                     }
                 }
-                if (j == width - 1){
-
-                    cout << "?";
+                if(j==width-1){
+                    cout<<"?";
                 }
             }
-            cout << endl;
+            cout<<endl;
         }
-
-        for (int i = 0; i < width + 2; i++){
-
-            cout << "?";
+        for(int i=0;i<width+1;i++){
+            cout<<"?";
         }
-        cout << endl << "Score: " << sc << endl;
+        cout<<endl<<"Score :"<<sc;
     }
-
-    void Input() {      // setting up commands
-        if (_kbhit()) {
-            switch (_getch()) {
-            case 'w':
-                b = UP;
-                break;
-            case 's':
-                b = DOWN;
-                break;
-            case 'a':
-                b = LEFT;
-                break;
-            case 'd':
-                b = RIGHT;
-                break;
-            case 'm':
-                g_o = true;
-                break;
+    void play(){        //setting up commands
+        if(_kbhit()){                                   
+            switch(_getch()){
+                case 'w':
+                    b=UP;
+                    break;
+                case 's':
+                    b=DOWN;
+                    break;
+                case 'a':
+                    b=LEFT;
+                    break;
+                case 'd':
+                    b=RIGHT;
+                    break;
+                case 'm':
+                    g_o=true;
+                    break;
+                default:
+                    break;
             }
         }
     }
-
-    void Logic() {
-        int prevX = tx[0];      // condition for tail to follow the head
-        int prevY = ty[0];
-        int prev2X, prev2Y;
-        tx[0] = sx;
-        ty[0] = sy;
-        for (int i = 1; i < numt; i++) {
-            prev2X = tx[i];
-            prev2Y = ty[i];
-            tx[i] = prevX;      //to make it follow the previous
-            ty[i] = prevY;
-            prevX = prev2X;     //updation for next iteration of the for loop
-            prevY = prev2Y;
+    void conditions(){
+        int tempx=tx[0],tempy=ty[0],ttempx,ttempy;
+        tx[0]=sx;                       // condition for tail to follow the head
+        ty[0]=sy;
+        for(int i=1;i<numt;i++){
+            ttempx=tx[i];
+            ttempy=ty[i];
+            tx[i]=tempx;                    //to make it follow the previous
+            ty[i]=tempy;
+            tempx=ttempx;                   //updation for next iteration of the for loop
+            tempy=ttempy;
         }
-        switch (b) {
-        case LEFT:
-            sx--;
-            break;
-        case RIGHT:
-            sx++;
-            break;
-        case UP:
-            sy--;
-            break;
-        case DOWN:
-            sy++;
-            break;
-        default:
-            break;
+        switch(b){
+            case UP:
+                sy--;
+                break;
+            case DOWN:
+                sy++;
+                break;
+            case RIGHT:
+                sx++;
+                break;
+            case LEFT:
+                sx--;
+                break;
+            default:
+                break;
         }
-        if (sx >= width || sx < 0 || sy >= height || sy < 0){
-
-            g_o = true;
+        if(sx<0 || sx>=width || sy<0 || sy>=height ){
+            g_o=true;
         }
-        if (sx == ax && sy == ay) {
-            
+        if(sx==ax && sy==ay){
             sc++;
+            numt++;
             ax = rand() % width;
             ay = rand() % height;
-            numt++;
         }
-        for (int i = 0; i < numt; i++) {
-
-            if (tx[i] == sx && ty[i] == sy)
-                g_o = true;
-        }          // snakes mouth on its own tail
+        for(int i=0;i<numt;i++){
+            if(sx==tx[i] && sy==ty[i]){             // snakes mouth on its own tail
+                g_o=true;
+            }
+        }
     }
 public:
-    Sgame() {
-        b = STOP;       //snake has to be not moving initially
-        sx = width-4;       // initialising snakes position
-        sy = height-4;
-        ax = rand() % width;        // we want the apple-x to be in random position and to be inside the boundary
-        ay = rand() % height;
-        sc = 0;     //initialise score to 0
-        numt = 0;
-        g_o = false;        //game has just started 😎😎
-        while(!g_o){        // until u fulfill the conditions to lose
-            Print();
-            Input();
-            Logic();
-            Sleep(100);             //to slow down flicker
+    Sgame(){
+        b=STOP;                                              //snake has to be not moving initially
+        sx=width-4,sy=height-4;                                          // initialising snakes position
+        ax = rand () % width;                                   // we want the apple-x to be in random position and to be inside the boundary
+        ay= rand () % height;                                  // we want the apple-y to be in random position and to be inside the boundary
+        sc=0,numt=0;                                               //initialise score to 0
+        g_o=false;                                           //game has just started 😎😎
+        while(!g_o){                                        // until u fulfill the conditions to lose
+            print();
+            play();
+            conditions();
+            Sleep(200);                             //to slow down the flickering
         }
     }
 };
-
-int main() {
-    Sgame game;
+int main(){
+    Sgame Chinmay;
     return 0;
 }
