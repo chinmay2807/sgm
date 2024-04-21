@@ -1,50 +1,68 @@
+//TRY TO PLAY ONCE .YOU WILL LOVE IT.
+//there are 2 modes --easy and hard that u can access by getsetgo1 for easy and getsetgo2 for hard
+//in easy the apple is away from the boundary and snake moves slow while in hard mode the snake moves fast and the appple gets close to the boundary
+// i tried to make it hell lot of coloured but it got very slow so i made it only a bit coloured
+
+
+
+
+#include<stdlib.h>
 #include<conio.h>
 #include<windows.h>
 #include<bits/stdc++.h>
 #include<cstdlib>
 using namespace std;
-
+int key=0;                                                 // to decide the level of the game
 const int width=30;
-const int height=30;
-bool g_o;                                                   //bool game over
+const int height=20;
+bool g_o;                                                  //bool game over
 enum button{STOP=0,LEFT,RIGHT,UP,DOWN};
 button b;
-int sx,sy,tx[900],ty[900],numt,ax,ay,sc;                    //sx:snake y,sy:snake y,ay:apple y ,sc:score , numt =tail count,tx and ty are array of tail x and y coordinates 
+int sx,sy,tx[600],ty[600],numt,ax,ay,sc;                    //sx:snake y,sy:snake y,ay:apple y ,sc:score , numt =tail count,tx and ty are array of tail x and y coordinates 
 class screen{
     void print(){                                           // function that prints the game setup
         system("CLS");                                      //to not print game step by step one after other sleep but to clear and then print again
+        system("Color E4");
         for(int i=0;i<width+1;i++){
-            cout<<"?";                                      // '?' tells the boundary
+            cout<<"#";                                      // '?' tells the boundary
         }
         cout<<endl;
         for(int i=0;i<height;i++){
             for(int j=0;j<width;j++){
                 if(j==0){
-                    cout<<"?";
+                // system("Color 0E");
+                    cout<<"#";
                 }else if(i==sy && j==sx){
+                    // system("Color 02");
                     cout<<"S";
                 }else if(i==ay && j==ax){
-                    cout<<"A";
+                    // system("Color 04");
+                    cout<<"@";
                 }else{
                     bool p =false;
                     for (int n=0;n<numt;n++){
                         if(j==tx[n] && i==ty[n]){
+                            // system("Color 02");
                             cout<<"T";
                             p = true;
                         }
                     }if(!p){
-                    cout<<" ";
+                        // system("Color 07");
+                        cout<<" ";
                     }
                 }
                 if(j==width-1){
-                    cout<<"?";
+                    // system("Color 0E");
+                    cout<<"#";
                 }
             }
             cout<<endl;
         }
         for(int i=0;i<width+1;i++){
-            cout<<"?";
+            // system("Color 0E");
+            cout<<"#";
         }
+        // system("Color 0B");
         cout<<endl<<"Score :"<<sc;
     }
 public:
@@ -54,20 +72,28 @@ public:
 };
 class input{
 void play(){        //setting up commands
-    if(_kbhit()){                                   
+    if(_kbhit()){                      
         switch(_getch()){
             case 'w':
-                b=UP;
-                break;
+                if (b == LEFT || b == RIGHT || b == STOP){
+                    b=UP;
+                }
+                    break;
             case 's':
-                b=DOWN;
-                break;
+                if (b == LEFT || b == RIGHT || b == STOP){
+                    b=DOWN;
+                }
+                    break;
             case 'a':
-                b=LEFT;
-                break;
+                if (b == UP || b == DOWN || b == STOP){
+                    b=LEFT;
+                }
+                    break;
             case 'd':
-                b=RIGHT;
-                break;
+                if (b == UP || b == DOWN || b == STOP){
+                    b=RIGHT;
+                }
+                    break;
             case 'm':
                 g_o=true;
                 break;
@@ -96,32 +122,56 @@ void conditions(){
     }
     switch(b){
         case UP:                        // what does the button b does 
-            sy--;
-            break;
+                sy--;
+                break;
         case DOWN:
-            sy++;
-            break;
+                sy++;
+                break;
+
         case RIGHT:
-            sx++;
-            break;
+                sx++;
+                break;
+
         case LEFT:
-            sx--;
-            break;
+                sx--;
+                break;
+
         default:
             break;
     }
-    if(sx<0 || sx>=width || sy<0 || sy>=height ){  // snake gets out of the boundary
+    if(sx<0 || sx>=width || sy<0 || sy>=height){  // snake gets out of the boundary
         g_o=true;
     }
     if(sx==ax && sy==ay){  // snake eats the apple 
         sc++;
         numt++;
-        ax = rand() % width;
-        ay = rand() % height;
+        if(key ==0 ){
+            ax = rand() % width;
+            ay = rand() % height;
+
+        }else{
+            ax = rand () % width;                                // we want the apple-x to be in random position and to be inside the boundary
+            if(ax<4 || ax>(height -4)){
+                if(ax<4){
+                    ax+=4;
+                }else{
+                    ax-=4;
+                }
+            }
+            ay= rand () % height;                                // we want the apple-y to be in random position and to be inside the boundary
+            if(ay<4 || ay>(height -4)){
+                if(ay<4){
+                    ay+=4;
+                }else{
+                    ay-=4;
+                }
+            }
+        }
     }
     for(int i=0;i<numt;i++){
         if(sx==tx[i] && sy==ty[i]){             // snakes mouth on its own tail
             g_o=true;
+            break;
         }
     }
 }
@@ -131,7 +181,36 @@ public:
     }
 };
 class Sgame:private screen,private input,private rules{                                                //class of snake game inheriting all the components so that user has access only to start the game no access to the working of the code
-void start(){
+void starteasy(){
+        key=1;                                                // to make game easy for noobs
+        b=STOP;                                              //snake has to be not moving initially
+        sx=width-4,sy=height-4;                              // initialising snakes position
+        ax = rand () % width;                                // we want the apple-x to be in random position and to be inside the boundary
+        if(ax<4 || ax>(height -4)){
+            if(ax<4){
+                ax+=4;
+            }else{
+                ax-=4;
+            }
+        }
+        ay= rand () % height;                                // we want the apple-y to be in random position and to be inside the boundary
+        if(ay<4 || ay>(height -4)){
+            if(ay<4){
+                ay+=4;
+            }else{
+                ay-=4;
+            }
+        }
+        sc=0,numt=0;                                         //initialise score to 0
+        g_o=false;                                           //game has just started 😎😎
+        while(!g_o){                                         // until u fulfill the conditions to lose
+            screen();
+            input();
+            rules();
+            Sleep(50);                                        //to slow down the flickering
+        }
+}
+void starthard(){  
         b=STOP;                                              //snake has to be not moving initially
         sx=width-4,sy=height-4;                              // initialising snakes position
         ax = rand () % width;                                // we want the apple-x to be in random position and to be inside the boundary
@@ -142,17 +221,24 @@ void start(){
             screen();
             input();
             rules();
-            Sleep(50);                             //to slow down the flickering
+            Sleep(20);                                        //to slow down the flickering
         }
 }
 public:
     Sgame(){}
-    inline friend void getsetgo();
+    inline friend void getsetgo1();
+    inline friend void getsetgo2();
 };
-void getsetgo(){
+void getsetgo1(){
     Sgame a;
-    a.start();
+    a.starteasy();
+}
+void getsetgo2(){
+    Sgame a;
+    a.starthard();
 }
 int main(){
-    getsetgo();
+    getsetgo1();// if u want to play easy mode
+    //getsetgo2();   -- if u want to play hard mode
 }
+
