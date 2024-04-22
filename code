@@ -1,29 +1,12 @@
-//IN CPP
-// follows all the rules of classical snake game
-//     https://microsoft.github.io/tilecode/doc/mechanics.html
-// the main oops concept is how the user is given access to only the modes of game and to control the speed i.e. data hiding
-
-// S represents the head   t represents the tail and @ represents the apple while # is boundary
-//TRY TO PLAY ONCE .YOU WILL LOVE IT.
-//first i planned there to be 2 modes --easy and hard that u can access by easy() for easy and hard() for hard
-//in easy the apple is away from the boundary and snake moves slow while in hard mode the snake moves fast and the appple gets close to the boundary
-//'''BUT''' i made so that a person can train slowly to be a champion using these two modes with slight changes
-// by controlling the snake speed or it is basically the refresh rate
-// there are 2 modes to control to how far the apple will stay away from the boundary while u can control the snake speed in both the levels with some boundary conditions
-// in easy mode the snake speed or the refresh rate can be from 5-fps(sleep-200) to 20-fps(sleep-50)
-// in hard mode the snake speed or the refresh rate can be from 10-fps(sleep-100) to 200-fps(sleep-5)
-// if the user sets speed out of the boundary conditions for then in both the cases the lower speed will be set
-// i tried to make it hell lot of coloured but it got very slow so i made it only a bit coloured
-
-
-
-
 #include<stdlib.h>
 #include<conio.h>
 #include<windows.h>
 #include<bits/stdc++.h>
 #include<cstdlib>
+#include<time.h>
 using namespace std;
+
+
 int key=0;                                                 // to decide the level of the game
 const int width=40;
 const int height=20;
@@ -160,9 +143,24 @@ void conditions(){
         if(key ==0 ){
             ax = rand() % width;
             ay = rand() % height;
+            if(ax<1 || ax>(height -1)){
+            if(ax<4){
+                ax+=1;
+            }else{
+                ax-=1;
+            }
+        }
+        if(ay<1 || ay>(height -1)){
+            if(ay<4){
+                ay+=1;
+            }else{
+                ay-=1;
+            }
+        }
 
         }else{
             ax = rand () % width;                                // we want the apple-x to be in random position and to be inside the boundary
+            ay= rand () % height;                                // we want the apple-y to be in random position and to be inside the boundary
             if(ax<4 || ax>(height -4)){
                 if(ax<4){
                     ax+=6;
@@ -170,7 +168,6 @@ void conditions(){
                     ax-=6;
                 }
             }
-            ay= rand () % height;                                // we want the apple-y to be in random position and to be inside the boundary
             if(ay<4 || ay>(height -4)){
                 if(ay<4){
                     ay+=6;
@@ -198,6 +195,7 @@ void starteasy(int a1){
         b=STOP;                                              //snake has to be not moving initially
         sx=width-4,sy=height-4;                              // initialising snakes position
         ax = rand () % width;                                // we want the apple-x to be in random position and to be inside the boundary
+        ay= rand () % height;                                // we want the apple-y to be in random position and to be inside the boundary
         if(ax<4 || ax>(height -4)){
             if(ax<4){
                 ax+=6;
@@ -205,7 +203,6 @@ void starteasy(int a1){
                 ax-=6;
             }
         }
-        ay= rand () % height;                                // we want the apple-y to be in random position and to be inside the boundary
         if(ay<4 || ay>(height -4)){
             if(ay<4){
                 ay+=6;
@@ -232,6 +229,20 @@ void starthard(int a1){
         sx=width-4,sy=height-4;                              // initialising snakes position
         ax = rand () % width;                                // we want the apple-x to be in random position and to be inside the boundary
         ay= rand () % height;                                // we want the apple-y to be in random position and to be inside the boundary
+        if(ax<1 || ax>(height -1)){
+            if(ax<4){
+                ax+=1;
+            }else{
+                ax-=1;
+            }
+        }
+        if(ay<1 || ay>(height -1)){
+            if(ay<4){
+                ay+=1;
+            }else{
+                ay-=1;
+            }
+        }
         sc=0,numt=0;                                         //initialise score to 0
         g_o=false;                                           //game has just started 😎😎
         while(!g_o){                                         // until u fulfill the conditions to lose
@@ -259,7 +270,7 @@ void hard(int a1){
     a.starthard(a1);
 }
 int main(){
+    srand(time(NULL)); 
     // easy(10);// if u want to play easy mode
-    hard(5);   //-- if u want to play hard mode
+    hard(100);   //-- if u want to play hard mode
 }
-
