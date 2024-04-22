@@ -163,14 +163,14 @@ void conditions(){
             ax = rand() % width;
             ay = rand() % height;
             if(ax<1 || ax>(height -1)){
-            if(ax<4){
+            if(ax<1){
                 ax+=1;
             }else{
                 ax-=1;
             }
         }
         if(ay<1 || ay>(height -1)){
-            if(ay<4){
+            if(ay<1){
                 ay+=1;
             }else{
                 ay-=1;
@@ -248,15 +248,15 @@ void starthard(int a1){
         sx=width-4,sy=height-4;                              // initialising snakes position
         ax = rand () % width;                                // we want the apple-x to be in random position and to be inside the boundary
         ay= rand () % height;                                // we want the apple-y to be in random position and to be inside the boundary
-        if(ax<1 || ax>(height -1)){
-            if(ax<4){
+        if(ax<1 || ax>(height)){
+            if(ax<1){
                 ax+=1;
             }else{
                 ax-=1;
             }
         }
-        if(ay<1 || ay>(height -1)){
-            if(ay<4){
+        if(ay<0 || ay>(height)){
+            if(ay<0){
                 ay+=1;
             }else{
                 ay-=1;
@@ -291,5 +291,5 @@ void hard(int a1){
 int main(){
     srand(time(NULL)); 
     // easy(10);// if u want to play easy mode
-    hard(5);   //-- if u want to play hard mode
+    hard(20);   //-- if u want to plaaaaaaaawwday hard mode
 }
