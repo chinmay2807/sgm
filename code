@@ -291,5 +291,5 @@ void hard(int a1){
 int main(){
     srand(time(NULL)); 
     // easy(10);// if u want to play easy mode
-    hard(20);   //-- if u want to plaaaaaaaawwday hard mode
+    hard(20);   //-- if u want to play hard mode
 }
