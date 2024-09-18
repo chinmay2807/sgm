@@ -69,7 +69,7 @@
 //     printf("Enter the coach to be inserted in the train with passenger count: ");
 //     int p;
 //     scanf("%d",&p);
-//     Insert(first, n, p);
+//     Insert(first, 2, p);
 //     Display(first,n);
 //     return 0;
 // }
