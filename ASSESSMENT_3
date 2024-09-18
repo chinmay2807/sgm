@@ -1,0 +1,295 @@
+#include <stdio.h>
+#include <stdlib.h>
+// Q1----------------------------------------------------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------------------------------------------------------
+// struct Node {
+//     int data;
+//     struct Node *next;
+// } *first = NULL;
+// void create(int A[], int n) {
+//     int i;
+//     struct Node *t, *last;
+//     first = (struct Node *)malloc(sizeof(struct Node));
+//     first->data = A[0];
+//     first->next = NULL;
+//     last = first;
+//     for (i = 1; i < n; i++) {
+//         t = (struct Node *)malloc(sizeof(struct Node));
+//         t->data = A[i];
+//         t->next = NULL;
+//         last->next = t;
+//         last = t;
+//     }
+// }
+// void Display(struct Node *p,int n) {
+//     while (n>0) {
+//         printf("%d->", p->data);
+//         p = p->next;
+//         n--;
+//     }
+//     printf("%d", p->data);
+// }
+// int count(struct Node *p) {
+//     int l = 0;
+//     while (p) {
+//         l++;
+//         p = p->next;
+//     }
+//     return l;
+// }
+// void Insert(struct Node *p, int index, int x) {
+//     struct Node *t;
+//     int i;
+//     if (index < 0 || index > count(p))
+//         return;
+//     t = (struct Node *)malloc(sizeof(struct Node));
+//     t->data = x;
+//     if (index == 0) {
+//         t->next = first;
+//         first = t;
+//     } else {
+//         for (i = 0; i < index - 1 && p; i++)
+//             p = p->next;
+//         if (p) {
+//             t->next = p->next;
+//             p->next = t;
+//         }
+//     }
+// }
+// int main() {
+//     printf("Enter the number of coaches in the train: ");
+//     int n;
+//     scanf("%d", &n);
+//     int A[n];
+//     printf("Enter each coach with passenger count: ");
+//     for(int i=0;i<n;i++) {
+//         scanf("%d", &A[i]);
+//     }
+//     create(A, 5);
+//     printf("Enter the coach to be inserted in the train with passenger count: ");
+//     int p;
+//     scanf("%d",&p);
+//     Insert(first, n, p);
+//     Display(first,n);
+//     return 0;
+// }
+// Q2---------------------------------------------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// struct Node {
+//     struct Node *prev;
+//     int data;
+//     struct Node *next;
+// };
+// void create(int A[], int n, struct Node **head) {
+//     struct Node *t, *last;
+//     int i;
+//     *head = (struct Node *)malloc(sizeof(struct Node));
+//     (*head)->data = A[0];
+//     (*head)->prev = (*head)->next = NULL;
+//     last = *head;
+//     for(i = 1; i < n; i++) {
+//         t = (struct Node *)malloc(sizeof(struct Node));
+//         t->data = A[i];
+//         t->next = last->next;
+//         t->prev = last;
+//         last->next = t;
+//         last = t;
+//     }
+// }
+// void Display(struct Node *p) {
+//     while(p) {
+//         printf("%d", p->data);
+//         if (p->next) {
+//             printf("->");
+//         }
+//         p = p->next;
+//     }
+//     printf("->NULL\n");
+// }
+// void InsertSorted(struct Node **head, int x) {
+//     struct Node *t, *p;
+//     t = (struct Node *)malloc(sizeof(struct Node));
+//     t->data = x;
+//     if (*head == NULL) {
+//         t->prev = t->next = NULL;
+//         *head = t;
+//     }
+//     else if (x < (*head)->data) {
+//         t->prev = NULL;
+//         t->next = *head;
+//         (*head)->prev = t;
+//         *head = t;
+//     }
+//     else {
+//         p = *head;
+//         while (p->next && p->next->data < x) {
+//             p = p->next;
+//         }
+//         t->next = p->next;
+//         t->prev = p;
+//         if (p->next) {
+//             p->next->prev = t;
+//         }
+//         p->next = t;
+//     }
+// }
+// int main() {
+//     int t, n, a;
+//     printf("Enter the number of test cases: ");
+//     scanf("%d", &t);
+//     while(t--) {
+//         printf("Enter the number of elements in the linked list: ");
+//         scanf("%d", &n);
+//         int A[n];
+//         for(int i = 0; i < n; i++) {
+//             scanf("%d", &A[i]);
+//         }
+//         struct Node *head = NULL;
+//         create(A, n, &head);
+//         printf("Enter the data to be inserted: ");
+//         scanf("%d", &a);
+//         InsertSorted(&head, a);
+//         Display(head);
+//     }
+//     return 0;
+// }
+
+// Q3---------------------------------------------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+// struct Node {
+//     int data;
+//     struct Node *next;
+// } *Head = NULL;
+// void create(int A[], int n) {
+//     int i;
+//     struct Node *t, *last;
+//     Head = (struct Node *)malloc(sizeof(struct Node));
+//     Head->data = A[0];
+//     Head->next = Head;
+//     last = Head;
+//     for (i = 1; i < n; i++) {
+//         t = (struct Node *)malloc(sizeof(struct Node));
+//         t->data = A[i];
+//         t->next = last->next;
+//         last->next = t;
+//         last = t;
+//     }
+// }
+// void Display(struct Node *h) {
+//     if (Head == NULL) {
+//         printf("List is empty\n");
+//         return;
+//     }
+//     do {
+//         printf("%d", h->data);
+//         h = h->next;
+//         if (h != Head) printf("->");
+//     } while (h != Head);
+//     printf("\n");
+// }
+// int Length(struct Node *p) {
+//     int len = 0;
+//     if (p == NULL) return len;
+//     do {
+//         len++;
+//         p = p->next;
+//     } while (p != Head);
+//     return len;
+// }
+// void Insert(int index, int x) {
+//     struct Node *t, *p = Head;
+//     int i;
+//     if (index < 0 || index > Length(Head)) {
+//         printf("Invalid index\n");
+//         return;
+//     }
+//     t = (struct Node *)malloc(sizeof(struct Node));
+//     t->data = x;
+//     if (index == 0) {
+//         if (Head == NULL) {
+//             Head = t;
+//             Head->next = Head;
+//         } else {
+//             while (p->next != Head) p = p->next;
+//             p->next = t;
+//             t->next = Head;
+//             Head = t;
+//         }
+//     } else {
+//         for (i = 0; i < index - 1; i++) p = p->next;
+//         t->next = p->next;
+//         p->next = t;
+//     }
+// }
+// int Delete(int index) {
+//     struct Node *p = Head, *q;
+//     int i, x;
+//     if (index < 1 || index > Length(Head)) {
+//         printf("Invalid index\n");
+//         return -1;
+//     }
+//     if (index == 1) {
+//         while (p->next != Head) p = p->next;
+//         x = Head->data;
+//         if (Head == p) {
+//             free(Head);
+//             Head = NULL;
+//         } else {
+//             p->next = Head->next;
+//             free(Head);
+//             Head = p->next;
+//         }
+//     } else {
+//         for (i = 0; i < index - 2; i++) p = p->next;
+//         q = p->next;
+//         p->next = q->next;
+//         x = q->data;
+//         free(q);
+//     }
+//     return x;
+// }
+// int main() {
+//     int choice, element, position;
+//     int n;
+//     printf("Enter the number of elements to be inserted: ");
+//     scanf("%d", &n);
+//     int A[n];
+//     printf("Enter the elements: ");
+//     for (int i = 0; i < n; i++) {
+//         scanf("%d", &A[i]);
+//     }
+//     create(A, n);
+//     while (1) {
+//         printf("\n1. Insert\n2. Delete\n3. Display\n4. Exit\n");
+//         printf("Enter your choice: ");
+//         scanf("%d", &choice);
+//         switch (choice) {
+//             case 1:
+//                 printf("Enter the element to insert: ");
+//                 scanf("%d", &element);
+//                 printf("Enter the position to insert: ");
+//                 scanf("%d", &position);
+//                 Insert(position, element);
+//                 break;
+//             case 2:
+//                 printf("Enter the position to delete: ");
+//                 scanf("%d", &position);
+//                 element = Delete(position);
+//                 if (element != -1)
+//                     printf("Deleted element: %d\n", element);
+//                 break;
+//             case 3:
+//                 printf("The elements are: ");
+//                 Display(Head);
+//                 break;
+//             case 4:
+//                 exit(0);
+//             default:
+//                 printf("Invalid choice\n");
+//         }
+//     }
+// }
+
